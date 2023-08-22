@@ -46,10 +46,14 @@ def main():
         except KeyError:
             rolelist[name] = [role]
     for name, rlist in tqdm.tqdm(rolelist.items()):
+        if len(rlist) != len(set(rlist)):
+            raise RuntimeError(name, rlist)
         img = generate_certificate(name, rlist, "2023")
         img.save(f"{output}/{name}.png")
 
     print("\n".join([f"{name}: {rlist}" for name, rlist in rolelist.items()]))
+
+    
 
 
 if __name__ == "__main__":
