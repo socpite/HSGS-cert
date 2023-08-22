@@ -1,3 +1,4 @@
+import json
 import sys
 import csv
 import os
@@ -7,12 +8,19 @@ import PIL.ImageDraw
 import PIL.ImageFont
 import tqdm
 
+with open("assets/translations.json") as f:
+    translations = json.load(f)
+
 template = PIL.Image.open('assets/template.PNG')
 namefont = PIL.ImageFont.truetype('assets/Whitegone.ttf', size=100)
 yearfont = PIL.ImageFont.truetype('assets/SFCompactDisplay-Thin.otf', size = 24)
-rolefont = PIL.ImageFont.truetype('assets/SVN-ArtifexCF-Bold.ttf', size=35)
+rolefont = PIL.ImageFont.truetype('assets/SVN-ArtifexCF-Bold.ttf', size=30)
+
+def translate_roles(rlist: list[str]) -> list[str]:
+    return [f"{translations[role]} - {role}" for role in rlist]
 
 def generate_certificate(name: str, roles: list[str], year: str) -> PIL.Image.Image:
+    roles = translate_roles(roles)
     name = name.split("_")[0]
     img = template.copy()
     canvas = PIL.ImageDraw.Draw(img)
@@ -23,7 +31,7 @@ def generate_certificate(name: str, roles: list[str], year: str) -> PIL.Image.Im
     roles.sort(key = lambda x: len(x), reverse=True)
 
     for i, role in enumerate(roles):
-        canvas.text((528, 485+28+38*(i+1)), role, font = rolefont, fill=(49, 169, 221), align="center", anchor="mm")
+        canvas.text((528, 485+28+33*(i+1)), role, font = rolefont, fill=(49, 169, 221), align="center", anchor="mm")
         
     return img
 
