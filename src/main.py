@@ -49,6 +49,8 @@ def main():
         img = generate_certificate(name, rlist, "2023")
         img.save(f"{output}/{name}.png")
 
+    print("\n".join([f"{name}: {rlist}" for name, rlist in rolelist.items()]))
+
 
 if __name__ == "__main__":
     main()
